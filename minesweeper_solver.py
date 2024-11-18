@@ -672,7 +672,7 @@ class MinesweeperSolver:
                             (self.method_groups, "Groups"),
                             (self.method_subgroups, "Subgroups"),
                             (self.method_coverage, "Coverage"),
-                            # (self.method_csp, "CSP"),
+                            (self.method_csp, "CSP"),
                             (self.method_bruteforce, "Bruteforce"),
                             ]
 

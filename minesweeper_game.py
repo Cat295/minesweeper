@@ -201,7 +201,7 @@ def screenshot_board():
     
     # Capture the entire board at once
     screenshot = pyautogui.screenshot(region=(BOARD_TOP_LEFT[0], BOARD_TOP_LEFT[1], board_width, board_height))
-    screenshot.save('ALL_BOARD.png')
+    # screenshot.save('ALL_BOARD.png')
     # Convert the screenshot to a format usable by OpenCV
     open_cv_image = np.array(screenshot)
     open_cv_image = open_cv_image[:, :, ::-1].copy()  # Convert RGB to BGR
