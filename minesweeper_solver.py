@@ -771,7 +771,7 @@ def main(game_level):
 
     move_counter = 1
     once = True
-
+    pyautogui.moveTo(50,50)
     if once:
         safe = []
         mines = []
@@ -807,7 +807,6 @@ def main(game_level):
         game.make_a_move(safe, mines) # Call the function
         print(game)
         move_counter += 1
-        print(f"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 
     print(mg.STATUS_MESSAGES[game.status])
 

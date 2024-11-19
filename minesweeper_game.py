@@ -222,7 +222,7 @@ def is_game_end():
         _, max_val_dead, _, _ = cv2.minMaxLoc(result)
         if max_val_dead > 0.8:
             print('Dead detected')
-            quit()
+            exit(1)
 
     # Check for no more moves (unrevealed cells)
     for cell_img in unrevealed_list:
@@ -230,14 +230,14 @@ def is_game_end():
         _, max_val_unrevealed, _, _ = cv2.minMaxLoc(result)
         if max_val_unrevealed < 0.4:
             print('No more move detected')
-            quit()
+            exit(1)
 
     # Check for win
     result = cv2.matchTemplate(screenshot_check, won_template, cv2.TM_CCOEFF_NORMED)
     _, max_val_won, _, _ = cv2.minMaxLoc(result)
     if max_val_won > 0.8:
         print('Won detected')
-        quit()
+        exit(1)
 
     return False
 
@@ -342,14 +342,16 @@ def convert_board_capture_to_matrix(board_image):
             while cell_state == '?':
                 # unknownCellScreenshot = pyautogui.screenshot(region=(BOARD_TOP_LEFT[0] + col * CELL_SIZE, BOARD_TOP_LEFT[1] + row * CELL_SIZE, CELL_SIZE, CELL_SIZE))
                 # unknownCellScreenshot.save('./unknown/' + str(row+1) + '_' + str(col+1) + '.png')
-                # quit()
+                # exit(1)
                 # time.sleep(0.1)
+                is_game_end()
+                # pyautogui.moveTo(50,50)
                 board_image = screenshot_board()
                 cell_image = board_image[y_start:y_start + CELL_SIZE, x_start:x_start + CELL_SIZE]
                 cell_state = classify_cell(cell_image, row, col)
                 count = count+1
-                if count>30:
-                    quit()
+                if count>20:
+                    exit(1)
                 # return np.array(board_matrix)
             if cell_state == '$':
                 print(f'Detected ITEM at {col} {row}')
@@ -527,6 +529,29 @@ def bring_to_front(a, b, c):
     
     return a, b
 
+def move_mouse_to_corner():
+    # Get the current mouse position
+    x, y = pyautogui.position()
+    # Determine where to move the mouse based on its current sector
+    if x < half_width and y < half_height:
+        # print("Mouse is in the top-left sector")
+        target_x = BOARD_TOP_LEFT[0] - 50
+        target_y = BOARD_TOP_LEFT[1] - 50
+    elif x >= half_width and y < half_height:
+        # print("Mouse is in the top-right sector")
+        target_x = BOARD_TOP_LEFT[0] + CELL_SIZE * BOARD_SIZE_COL + 50
+        target_y = BOARD_TOP_LEFT[1] - 50
+    elif x < half_width and y >= half_height:
+        # print("Mouse is in the bottom-left sector")
+        target_x = BOARD_TOP_LEFT[0] - 50
+        target_y = BOARD_TOP_LEFT[1] + CELL_SIZE * BOARD_SIZE_ROW + 50
+    else:
+        # print("Mouse is in the bottom-right sector")
+        target_x = BOARD_TOP_LEFT[0] + CELL_SIZE * BOARD_SIZE_COL + 50
+        target_y = BOARD_TOP_LEFT[1] + CELL_SIZE * BOARD_SIZE_ROW + 50
+    # Move the mouse to the calculated target position with a random duration
+    pyautogui.moveTo(target_x, target_y, duration=round(random.uniform(0.1, 0.3), 2))
+
 class MinesweeperGame:
     ''' Class for a minesweeper game: generate game board,
     accept a move, revealed the result, etc
@@ -567,20 +592,23 @@ class MinesweeperGame:
         printBoardInfo()
 
         # Capture screen then convert to np array
-        while True:
-            board_image = screenshot_board()
-            board_matrix_np = convert_board_capture_to_matrix(board_image)
-            if np.any(board_matrix_np == '?') == False:
-                break
-            else:
-                print('capture again')
+        # while True:
+        #     board_image = screenshot_board()
+        #     board_matrix_np = convert_board_capture_to_matrix(board_image)
+        #     if np.any(board_matrix_np == '?') == False:
+        #         break
+        #     else:
+        #         print('capture again')
+        print("init")
+        board_image = screenshot_board()
+        board_matrix_np = convert_board_capture_to_matrix(board_image)
 
         self.uncovered = board_matrix_np.T
         self.field = board_matrix_np.T
         print('Load map from dota:')
         print(self.uncovered)
         # print(type(self.uncovered))
-        # quit()
+        # exit(1)
         # Default status
         self.status = STATUS_ALIVE
 
@@ -634,29 +662,6 @@ class MinesweeperGame:
 
         click_cell(cell[0], cell[1], 'left')
 
-    def move_mouse_to_corner(self):
-        # Get the current mouse position
-        x, y = pyautogui.position()
-        # Determine where to move the mouse based on its current sector
-        if x < half_width and y < half_height:
-            # print("Mouse is in the top-left sector")
-            target_x = BOARD_TOP_LEFT[0] - 50
-            target_y = BOARD_TOP_LEFT[1] - 50
-        elif x >= half_width and y < half_height:
-            # print("Mouse is in the top-right sector")
-            target_x = BOARD_TOP_LEFT[0] + CELL_SIZE * BOARD_SIZE_COL + 50
-            target_y = BOARD_TOP_LEFT[1] - 50
-        elif x < half_width and y >= half_height:
-            # print("Mouse is in the bottom-left sector")
-            target_x = BOARD_TOP_LEFT[0] - 50
-            target_y = BOARD_TOP_LEFT[1] + CELL_SIZE * BOARD_SIZE_ROW + 50
-        else:
-            # print("Mouse is in the bottom-right sector")
-            target_x = BOARD_TOP_LEFT[0] + CELL_SIZE * BOARD_SIZE_COL + 50
-            target_y = BOARD_TOP_LEFT[1] + CELL_SIZE * BOARD_SIZE_ROW + 50
-        # Move the mouse to the calculated target position with a random duration
-        pyautogui.moveTo(target_x, target_y, duration=round(random.uniform(0.1, 0.3), 2))
-
     def make_a_move(self, safe=None, mines=None):
         ''' Do one minesweeper iteration.
         Accepts list of safe clicks and mine clicks.
@@ -674,15 +679,18 @@ class MinesweeperGame:
             for cell in mines:
                 self.handle_mine_click(cell)
 
-        self.move_mouse_to_corner()
+        move_mouse_to_corner()
 
-        while True:
-            board_image = screenshot_board()
-            board_matrix_np = convert_board_capture_to_matrix(board_image)
-            if np.any(board_matrix_np == '?') == False:
-                break
-            else:
-                print('capture again')
+        # while True:
+        #     board_image = screenshot_board()
+        #     board_matrix_np = convert_board_capture_to_matrix(board_image)
+        #     if np.any(board_matrix_np == '?') == False:
+        #         break
+        #     else:
+        #         print('capture again')
+
+        board_image = screenshot_board()
+        board_matrix_np = convert_board_capture_to_matrix(board_image)
 
         self.uncovered = board_matrix_np.T
         self.field = board_matrix_np.T
