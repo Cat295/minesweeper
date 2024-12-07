@@ -32,11 +32,11 @@ if (screen_width, screen_height) == (2560, 1440):
     OFFSET_X_LVL_1 = 1118
     OFFSET_Y_LVL_1 = 589
     OFFSET_X_LVL_2 = 1064
-    OFFSET_Y_LVL_2 = 552
+    OFFSET_Y_LVL_2 = 553
     OFFSET_X_LVL_3 = 1010
-    OFFSET_Y_LVL_3 = 516
+    OFFSET_Y_LVL_3 = 517
     OFFSET_X_LVL_4 = 956
-    OFFSET_Y_LVL_4 = 498
+    OFFSET_Y_LVL_4 = 499
     OFFSET_X_LVL_5 = 920
     OFFSET_Y_LVL_5 = 463
 else:
@@ -44,11 +44,11 @@ else:
     OFFSET_X_LVL_1 = 1118 - 320  # 798
     OFFSET_Y_LVL_1 = 589 - 180   # 408
     OFFSET_X_LVL_2 = 1064 - 320  # 744
-    OFFSET_Y_LVL_2 = 552 - 180   # 372
+    OFFSET_Y_LVL_2 = 553 - 180   # 372
     OFFSET_X_LVL_3 = 1010 - 320  # 690
-    OFFSET_Y_LVL_3 = 516 - 180   # 336
+    OFFSET_Y_LVL_3 = 517 - 180   # 336
     OFFSET_X_LVL_4 = 956 - 320   # 636
-    OFFSET_Y_LVL_4 = 498 - 180   # 318
+    OFFSET_Y_LVL_4 = 499 - 180   # 318
     OFFSET_X_LVL_5 = 920 - 320   # 600
     OFFSET_Y_LVL_5 = 463 - 180   # 283
 
