@@ -18,7 +18,7 @@ screen_width, screen_height = pyautogui.size()
 if (screen_width, screen_height) == (2560, 1440): 
     print("2K") 
     OFFSET_X_LVL_1 = 1118
-    OFFSET_Y_LVL_1 = 588
+    OFFSET_Y_LVL_1 = 589
     OFFSET_X_LVL_2 = 1064
     OFFSET_Y_LVL_2 = 552
     OFFSET_X_LVL_3 = 1010
@@ -30,7 +30,7 @@ if (screen_width, screen_height) == (2560, 1440):
 else:
     print("FULLHD") 
     OFFSET_X_LVL_1 = 1118 - 320  # 798
-    OFFSET_Y_LVL_1 = 588 - 180   # 408
+    OFFSET_Y_LVL_1 = 589 - 180   # 408
     OFFSET_X_LVL_2 = 1064 - 320  # 744
     OFFSET_Y_LVL_2 = 552 - 180   # 372
     OFFSET_X_LVL_3 = 1010 - 320  # 690
